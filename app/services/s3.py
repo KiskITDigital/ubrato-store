@@ -1,4 +1,5 @@
 import os
+import hashlib
 
 from fastapi import Depends, UploadFile
 
@@ -17,9 +18,11 @@ class S3Service:
         self, user_id: str, file: UploadFile, private: bool
     ) -> str:
         prefix = "private/" if private else ""
-        path = f"{self.s3_folder}{prefix}{user_id}/{file.filename}"
+        h = hashlib.new('sha256')
 
         body = await file.read()
+        h.update(body)
+        path = f"{self.s3_folder}{prefix}{user_id}/{h.hexdigest()}"
 
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w+b") as f:
