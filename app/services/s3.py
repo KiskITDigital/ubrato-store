@@ -2,7 +2,7 @@ import os
 
 from fastapi import Depends, UploadFile
 
-from app.config import Config, get_config
+from config import Config, get_config
 
 
 class S3Service:

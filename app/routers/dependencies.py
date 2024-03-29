@@ -3,32 +3,22 @@ from typing import Annotated, Optional
 from config import get_config
 from fastapi import Depends, Header, HTTPException, status
 
-from app.schemas.jwt_user import JWTUser
-from app.services.jwt import JWTService
+from schemas.jwt_user import JWTUser
+from services.jwt import JWTService
 
 
 async def authorized(
     authorization: Annotated[str, Header()],
     jwt_service: JWTService = Depends(),
 ) -> None:
-    _, err = jwt_service.unmarshal_jwt(authorization)
-    if err is not None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=err,
-        )
+    jwt_service.unmarshal_jwt(authorization)
 
 
 async def get_user(
     authorization: Annotated[str, Header()],
     jwt_service: JWTService = Depends(),
 ) -> Optional[JWTUser]:
-    user, err = jwt_service.unmarshal_jwt(authorization)
-    if err is not None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=err,
-        )
+    user = jwt_service.unmarshal_jwt(authorization)
     return user
 
 
@@ -37,12 +27,7 @@ async def is_creator(
     authorization: Annotated[str, Header()],
     jwt_service: JWTService = Depends(),
 ) -> None:
-    user, err = jwt_service.unmarshal_jwt(authorization)
-    if err is not None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=err,
-        )
+    user = jwt_service.unmarshal_jwt(authorization)
 
     if user.role < get_config().Role.manager or user.id == user_id:
         raise HTTPException(

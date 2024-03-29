@@ -11,10 +11,10 @@ from fastapi import (
     status,
 )
 
-from app.config import get_config
-from app.routers.dependencies import authorized, get_user
-from app.schemas.jwt_user import JWTUser
-from app.services.s3 import S3Service
+from config import get_config
+from routers.dependencies import authorized, get_user
+from schemas.jwt_user import JWTUser
+from services.s3 import S3Service
 
 router = APIRouter(
     prefix="/s3",
