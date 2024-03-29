@@ -13,8 +13,8 @@
     {
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
-          packages = with pkgs; [ python311 virtualenv poetry go-migrate ] ++
-            (with pkgs.python311Packages; [ pip psycopg2 ]);
+          packages = with pkgs; [ python311 virtualenv poetry go-migrate ruff ] ++
+            (with pkgs.python311Packages; [ pip python-lsp-server pyls-isort pyls-flake8 pylsp-mypy mypy ]);
         };
       });
     };
