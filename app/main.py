@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
-from app.exceptions import request_validation_exception_handler
+from exceptions import request_validation_exception_handler
 
-from app.routers import s3
+from routers import s3
 
 app = FastAPI(
     title="Ubrato API",
