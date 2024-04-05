@@ -11,9 +11,7 @@ class S3Service:
     def __init__(self, config: Config = Depends(get_config)) -> None:
         self.s3_folder = config.S3.FODLER
 
-    async def save_file(
-        self, user_id: str, file: UploadFile, private: bool
-    ) -> str:
+    async def save_file(self, user_id: str, file: UploadFile, private: bool) -> str:
         prefix = "private/" if private else ""
         h = hashlib.new("sha256")
 
@@ -22,8 +20,8 @@ class S3Service:
         file_name = file.filename if file.filename else ""
         path = f"{prefix}{user_id}/{h.hexdigest()[:15]}"
 
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(self.s3_folder + path + f".{file_name}", "w+b") as f:
+        os.makedirs(os.path.dirname(f"{self.s3_folder}{path}"), exist_ok=True)
+        with open(f"{self.s3_folder}{path}.{file_name}", "w+b") as f:
             f.write(body)
 
         await file.close()
