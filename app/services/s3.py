@@ -26,7 +26,7 @@ class S3Service:
 
         await file.close()
 
-        return path + f"/{file_name}"
+        return f"/{path}/{file_name}"
 
     async def load_file(self, path: str) -> bytes:
         with open(self.s3_folder + path, "rb") as f:
