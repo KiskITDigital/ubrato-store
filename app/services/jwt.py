@@ -17,7 +17,9 @@ class JWTService:
 
     def decode_jwt(self, token: str) -> JWTUser:
         try:
-            userd_dict = jwt.decode(token, self.secret, algorithms=[self.algorithm])
+            userd_dict = jwt.decode(
+                token, self.secret, algorithms=[self.algorithm]
+            )
 
             jwt_user = JWTUser(**userd_dict)
 

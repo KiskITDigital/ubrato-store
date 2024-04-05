@@ -37,9 +37,11 @@ app.add_middleware(
 app.include_router(s3.router)
 
 app.add_exception_handler(
-    RequestValidationError, request_validation_exception_handler  # type: ignore
+    RequestValidationError,
+    request_validation_exception_handler,  # type: ignore
 )
 
 app.add_exception_handler(
-    HTTPException, exception_handler  # type: ignore
+    HTTPException,
+    exception_handler,  # type: ignore
 )

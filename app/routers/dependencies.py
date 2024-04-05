@@ -2,7 +2,6 @@ from typing import Annotated, Optional
 
 from config import get_config
 from fastapi import Depends, Header, HTTPException, status
-
 from schemas.jwt_user import JWTUser
 from services.jwt import JWTService
 

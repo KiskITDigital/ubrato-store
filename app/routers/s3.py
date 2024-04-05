@@ -1,5 +1,6 @@
 from typing import Annotated
 
+from config import get_config
 from fastapi import (
     APIRouter,
     Depends,
@@ -10,8 +11,6 @@ from fastapi import (
     UploadFile,
     status,
 )
-
-from config import get_config
 from routers.dependencies import authorized, get_user
 from schemas.jwt_user import JWTUser
 from services.s3 import S3Service
@@ -39,19 +38,23 @@ async def create_upload_file(
     }
 
 
-@router.get("/{user_id}/{file}")
-async def get_file(user_id: str, file: str, s3: S3Service = Depends()):
-    content = await s3.load_file(f"{user_id}/{file}")
+@router.get("/{user_id}/{hash}/{file}")
+async def get_file(
+    user_id: str, hash: str, file: str, s3: S3Service = Depends()
+):
+    print(f"private/{user_id}/{hash}.{file}")
+    content = await s3.load_file(f"{user_id}/{hash}.{file}")
 
     return Response(content)
 
 
 @router.get(
-    "/private/{user_id}/{file}",
+    "/private/{user_id}/{hash}/{file}",
     dependencies=[Depends(authorized)],
 )
 async def get_private_file(
     user_id: str,
+    hash: str,
     file: str,
     user: JWTUser = Depends(get_user),
     s3: S3Service = Depends(),
@@ -61,6 +64,6 @@ async def get_private_file(
             status_code=status.HTTP_403_FORBIDDEN, detail="No access"
         )
 
-    content = await s3.load_file(f"private/{user_id}/{file}")
+    content = await s3.load_file(f"private/{user_id}/{hash}.{file}")
 
     return Response(content)
