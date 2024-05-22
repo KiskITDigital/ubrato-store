@@ -76,7 +76,7 @@ async def get_private_file(
 async def get_file_info(
     user_id: str, hash: str, file: str, s3: S3Service = Depends()
 ) -> FileStatsResponse:
-    return s3.get_info(f"private/{user_id}/{hash}.{file}")
+    return s3.get_info(f"{user_id}/{hash}.{file}")
 
 
 @router.get(
